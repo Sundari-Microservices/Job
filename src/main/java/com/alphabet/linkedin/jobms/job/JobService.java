@@ -1,13 +1,14 @@
 package com.alphabet.linkedin.jobms.job;
 
+import com.alphabet.linkedin.jobms.job.dto.JobWithCompnayDTO;
+import com.alphabet.linkedin.jobms.job.external.Company;
 import com.alphabet.linkedin.jobms.job.impl.JobServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class JobService implements JobServiceImpl {
@@ -21,8 +22,32 @@ public class JobService implements JobServiceImpl {
      * @return
      */
     @Override
-    public List<Job> findAll() {
-        return jobRepository.findAll();
+    public List<JobWithCompnayDTO> findAll() {
+
+        List<Job> jobs = jobRepository.findAll();
+//        List<JobWithCompnayDTO> jobWithCompnayDTOS = new ArrayList<>();
+//        for(Job job:jobs){
+//            RestTemplate restTemplate = new RestTemplate();
+//            JobWithCompnayDTO jobWithCompnayDTO = new JobWithCompnayDTO();
+//            Company company = restTemplate.getForObject("http://localhost:8081/companies/"+job.getCompanyId(), Company.class);
+//            jobWithCompnayDTO.setJob(job);
+//            jobWithCompnayDTO.setCompany(company);
+//            jobWithCompnayDTOS.add(jobWithCompnayDTO);
+//        }
+//        return jobWithCompnayDTOS;
+
+
+        return jobs.stream().map(this::covertToDTO)
+                .collect(Collectors.toList());
+    }
+
+    public JobWithCompnayDTO covertToDTO(Job job){
+        RestTemplate restTemplate = new RestTemplate();
+        JobWithCompnayDTO jobWithCompnayDTO = new JobWithCompnayDTO();
+        Company company = restTemplate.getForObject("http://localhost:8081/companies/"+job.getCompanyId(), Company.class);
+        jobWithCompnayDTO.setJob(job);
+        jobWithCompnayDTO.setCompany(company);
+        return jobWithCompnayDTO;
     }
 
     /**

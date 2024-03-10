@@ -1,5 +1,6 @@
 package com.alphabet.linkedin.jobms.job;
 
+import com.alphabet.linkedin.jobms.job.dto.JobWithCompnayDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class JobController {
 //    @GetMapping("/jobs")
 //    @RequestMapping(method = RequestMethod.GET, value = "/jobs")
     @GetMapping
-    public ResponseEntity<List<Job>> findAllJobs() {
+    public ResponseEntity<List<JobWithCompnayDTO>> findAllJobs() {
         return ResponseEntity.ok(jobService.findAll());
     }
 
