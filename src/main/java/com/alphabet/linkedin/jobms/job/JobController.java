@@ -1,6 +1,6 @@
 package com.alphabet.linkedin.jobms.job;
 
-import com.alphabet.linkedin.jobms.job.dto.JobWithCompnayDTO;
+import com.alphabet.linkedin.jobms.job.dto.JobDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,18 +28,18 @@ public class JobController {
 //    @GetMapping("/jobs")
 //    @RequestMapping(method = RequestMethod.GET, value = "/jobs")
     @GetMapping
-    public ResponseEntity<List<JobWithCompnayDTO>> findAllJobs() {
+    public ResponseEntity<List<JobDTO>> findAllJobs() {
         return ResponseEntity.ok(jobService.findAll());
     }
 
     //    @GetMapping("/jobs/{id}")
 //    @RequestMapping(method = RequestMethod.GET, value = "/jobs/{id}")
     @GetMapping("/{id}")
-    public ResponseEntity<Job> findJobById(@PathVariable Long id) {
+    public ResponseEntity<JobDTO> findJobById(@PathVariable Long id) {
 
-        Job job = jobService.getJob(id);
-        if (job != null) {
-            return new ResponseEntity<>(job, HttpStatus.OK);
+        JobDTO jobDTO = jobService.getJob(id);
+        if (jobDTO != null) {
+            return new ResponseEntity<>(jobDTO, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

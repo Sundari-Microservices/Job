@@ -1,14 +1,14 @@
 package com.alphabet.linkedin.jobms.job.impl;
 import com.alphabet.linkedin.jobms.job.Job;
-import com.alphabet.linkedin.jobms.job.dto.JobWithCompnayDTO;
+import com.alphabet.linkedin.jobms.job.dto.JobDTO;
 
 import java.util.List;
 
 public interface JobServiceImpl {
-    public List<JobWithCompnayDTO> findAll();
+    public List<JobDTO> findAll();
     public String createJob(Job job);
     public boolean updateJob(long id, Job job);
     public boolean deleteJob(Long id);
-    public Job getJob(Long id);
+    public JobDTO getJob(Long id);
 
 }
