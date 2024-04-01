@@ -7,6 +7,7 @@ import com.alphabet.linkedin.jobms.job.external.Company;
 import com.alphabet.linkedin.jobms.job.external.Review;
 import com.alphabet.linkedin.jobms.job.impl.JobServiceImpl;
 import com.alphabet.linkedin.jobms.job.mapper.JobMapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -36,6 +37,7 @@ public class JobService implements JobServiceImpl {
      * @return
      */
     @Override
+    @CircuitBreaker( name = "companyBreaker")
     public List<JobDTO> findAll() {
 
         List<Job> jobs = jobRepository.findAll();
