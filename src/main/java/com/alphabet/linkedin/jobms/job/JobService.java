@@ -8,6 +8,8 @@ import com.alphabet.linkedin.jobms.job.external.Review;
 import com.alphabet.linkedin.jobms.job.impl.JobServiceImpl;
 import com.alphabet.linkedin.jobms.job.mapper.JobMapper;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -33,13 +35,17 @@ public class JobService implements JobServiceImpl {
 
     @Autowired
     private ReviewClient reviewClient;
+
+    int retryAttempt =0;
     /**
      * @return
      */
     @Override
-    @CircuitBreaker( name = "companyBreaker")
+//    @CircuitBreaker( name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
+//    @Retry(name = "companyBreaker", fallbackMethod = "companyBreakerFallback")
+//    @RateLimiter(name = "companyBreaker")
     public List<JobDTO> findAll() {
-
+        System.out.println("Attempt: "+ ++retryAttempt);
         List<Job> jobs = jobRepository.findAll();
 //        List<JobWithCompnayDTO> jobWithCompnayDTOS = new ArrayList<>();
 //        for(Job job:jobs){
@@ -55,6 +61,11 @@ public class JobService implements JobServiceImpl {
 
         return jobs.stream().map(this::covertToDTO)
                 .collect(Collectors.toList());
+    }
+
+    public List<JobDTO> companyBreakerFallback(){
+        List<JobDTO> al= new ArrayList<>();
+        return al;
     }
 
     public JobDTO covertToDTO(Job job){
